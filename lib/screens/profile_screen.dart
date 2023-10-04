@@ -33,6 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildLoginForm() {
     return Column(
       children: [
+        Text("Вход", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         TextField(
           controller: _emailController,
           decoration: InputDecoration(labelText: 'E-mail'),
@@ -59,6 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildRegisterForm() {
     return Column(
       children: [
+        Text("Регистрация", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)), 
         TextField(
           controller: _nameController,
           decoration: InputDecoration(labelText: 'Имя'),
@@ -88,24 +90,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('Ошибка'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Ок'),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-          )
-        ],
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
       ),
-    );
-  }
+      title: Center(
+        child: Text('Ошибка'),
+      ),
+      content: Text(message),
+      actions: <Widget>[
+        TextButton(
+          child: Text('Ок'),
+          onPressed: () {
+            Navigator.of(ctx).pop();
+          },
+        )
+      ],
+    ),
+  );
+}
+
 
   void _handleLogin() async {
+    if (!isValidEmail(_emailController.text)) {
+      _showErrorDialog("Введите корректный e-mail");
+      return;
+    }
+
+    if (!isValidPassword(_passwordController.text)) {
+      _showErrorDialog("Пароль должен содержать не менее 8 символов и состоять только из символов английского алфавита");
+      return;
+    }
+    
     try {
       var user = await authService.loginUser(
         _emailController.text,
@@ -115,11 +133,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() => _currentUser = user);
       }
     } catch (error) {
-      _showErrorDialog(error.toString());
+      if (error is FirebaseAuthException) {
+        print("Firebase error code: ${error.code}");
+        switch (error.code) {
+          case 'user-not-found':
+            _showErrorDialog("Пользователь с таким e-mail не зарегистрирован");
+            break;
+          case 'wrong-password':
+            _showErrorDialog("Неверный пароль");
+            break;
+          case 'INVALID_LOGIN_CREDENTIALS':
+            _showErrorDialog("Неверные учетные данные. Пожалуйста, проверьте ваш e-mail и пароль и попробуйте снова");
+            break;
+          case 'too-many-requests':
+            _showErrorDialog("Слишком много попыток входа. Попробуйте позднее");
+            break;
+          default:
+            _showErrorDialog("Произошла ошибка при входе. Попробуйте снова.");
+        }
+      } else {
+        _showErrorDialog("Неизвестная ошибка. Пожалуйста, попробуйте снова.");
+      }
     }
-  }
+}
+
 
   void _handleRegister() async {
+    if (!isValidEmail(_emailController.text)) {
+      _showErrorDialog("Введите корректный e-mail");
+      return;
+    }
+
+    if (!isValidPassword(_passwordController.text)) {
+      _showErrorDialog("Пароль должен содержать не менее 8 символов и состоять только из символов английского алфавита");
+      return;
+    }
     try {
       var user = await authService.registerUser(
         _emailController.text,
@@ -130,16 +178,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() => _currentUser = user);
       }
     } catch (error) {
-      _showErrorDialog(error.toString());
+      if (error is FirebaseAuthException && error.code == 'email-already-in-use') {
+        _showErrorDialog("Пользователь с таким e-mail уже зарегистрирован");
+      } else {
+        _showErrorDialog(error.toString());
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     if (_currentUser == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(_isRegistering ? "Регистрация" : "Вход"),
+          title: Text("Профиль"),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -179,4 +232,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
   }
+}
+
+bool isValidEmail(String email) {
+  final RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$");
+  return emailRegExp.hasMatch(email);
+}
+
+bool isValidPassword(String password) {
+  // Проверка длины пароля и состоит ли он только из символов английского алфавита
+  final RegExp passwordRegExp = RegExp(r"^[a-zA-Z0-9]{8,}$");
+  return passwordRegExp.hasMatch(password);
 }

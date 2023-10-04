@@ -5,30 +5,20 @@ class AuthService {
 
   // Вход
   Future<User?> loginUser(String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } catch (e) {
-      print(e);  // Добавить обработку ошибок
-      return null;
-    }
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
   }
 
   // Регистрация
   Future<User?> registerUser(String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } catch (e) {
-      print(e);  // Добавить обработку ошибок
-      return null;
-    }
+    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
   }
 
   // Выход
