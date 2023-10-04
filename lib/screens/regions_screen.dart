@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import '../services/auth_service.dart';
+final AuthService authService = AuthService();
+
 
 class RegionCard extends StatelessWidget {
   final RegionInfo regionInfo;
@@ -135,7 +138,11 @@ class RegionDetailScreen extends StatelessWidget {
                         children: [
                             ElevatedButton(
                             onPressed: () {
-                                // Добавить в корзину
+                                if (authService.currentUser == null) {
+                                    Navigator.of(context).pushNamed('/profile'); // или другой маршрут к экрану авторизации
+                                } else {
+                                    // Добавить продукт в корзину
+                                }
                             },
                             child: Text('Добавить в корзину'),
                             ),

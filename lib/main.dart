@@ -4,33 +4,37 @@ import 'screens/profile_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(TravelAgencyApp());
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    runApp(TravelAgencyApp());
 }
 
 class TravelAgencyApp extends StatelessWidget {
-	@override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MainScreen(),
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          toolbarHeight: 40.0, // Высота AppBar
-          color: Colors.amber, // Цвет AppBar
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+            home: MainScreen(),
+            theme: ThemeData(
+                appBarTheme: AppBarTheme(
+                    toolbarHeight: 40.0, // Высота AppBar
+                    color: Colors.amber, // Цвет AppBar
+                ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                      ),
+                      // Стили других кнопок если потребуется прописать тут
+                  ),
+              ),
             ),
-            // Стили других кнопок если потребуется прописать тут
-          ),
-        ),
-      ),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+            debugShowCheckedModeBanner: false,
+            routes: {
+                '/profile': (context) => ProfileScreen(),
+                // ... возможно, другие маршруты ...
+            },
+        );
+    }
 }
 
 class MainScreen extends StatefulWidget {
