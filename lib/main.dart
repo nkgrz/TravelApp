@@ -22,9 +22,9 @@ class TravelAgencyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20), // Задайте желаемое значение радиуса скругления
+              borderRadius: BorderRadius.circular(20),
             ),
-            // Если вы хотите задать другие стили для кнопок, добавьте их здесь
+            // Стили других кнопок если потребуется прописать тут
           ),
         ),
       ),
@@ -106,11 +106,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _nameController = TextEditingController();
   bool _isRegistering = false;
 
-
   @override
   void initState() {
     super.initState();
     _currentUser = authService.currentUser;
+  }
+
+  Widget _buildLoginForm() {
+    return Column(
+      children: [
+        TextField(
+          controller: _emailController,
+          decoration: InputDecoration(labelText: 'E-mail'),
+        ),
+        SizedBox(height: 16),
+        TextField(
+          controller: _passwordController,
+          decoration: InputDecoration(labelText: 'Пароль'),
+          obscureText: true,
+        ),
+        SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: _handleLogin,
+          child: Text('Войти'),
+        ),
+        TextButton(
+          onPressed: () => setState(() => _isRegistering = true),
+          child: Text('Регистрация'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRegisterForm() {
+    return Column(
+      children: [
+        TextField(
+          controller: _nameController,
+          decoration: InputDecoration(labelText: 'Имя'),
+        ),
+        SizedBox(height: 16),
+        TextField(
+          controller: _emailController,
+          decoration: InputDecoration(labelText: 'E-mail'),
+        ),
+        SizedBox(height: 16),
+        TextField(
+          controller: _passwordController,
+          decoration: InputDecoration(labelText: 'Пароль'),
+          obscureText: true,
+        ),
+        SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: _handleRegister,
+          child: Text('Зарегистрироваться'),
+        ),
+        TextButton(
+          onPressed: () => setState(() => _isRegistering = false),
+          child: Text('Уже зарегистрированы? Войти'),
+        ),
+      ],
+    );
+  }
+
+  void _handleLogin() async {
+    var user = await authService.loginUser(
+      _emailController.text,
+      _passwordController.text,
+    );
+    if (user != null) {
+      setState(() => _currentUser = user);
+    } else {
+      // Обработка ошибок
+    }
+  }
+
+  void _handleRegister() async {
+    var user = await authService.registerUser(
+      _emailController.text,
+      _passwordController.text,
+    );
+    if (user != null) {
+      await user.updateDisplayName(_nameController.text);
+      setState(() => _currentUser = user);
+    } else {
+      // Обработка ошибок
+    }
   }
 
   @override
@@ -129,63 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               margin: const EdgeInsets.all(20.0),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (_isRegistering) ...[
-                      TextField(
-                        controller: _nameController,
-                        decoration: InputDecoration(labelText: 'Имя'),
-                      ),
-                      SizedBox(height: 16),
-                    ],
-                    TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(labelText: 'E-mail'),
-                    ),
-                    SizedBox(height: 16),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(labelText: 'Пароль'),
-                      obscureText: true,
-                    ),
-                    SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        var user;
-                        if (_isRegistering) {
-                          user = await authService.registerUser(
-                              _emailController.text, _passwordController.text);
-                          if (user != null) {
-                            await user.updateDisplayName(_nameController.text);
-                          }
-                        } else {
-                          user = await authService.loginUser(
-                              _emailController.text, _passwordController.text);
-                        }
-
-                        if (user != null) {
-                          setState(() {
-                            _currentUser = user;
-                          });
-                        } else {
-                          // Обработка ошибок
-                        }
-                      },
-                      child: Text(_isRegistering ? 'Зарегистрироваться' : 'Войти'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isRegistering = !_isRegistering;
-                        });
-                      },
-                      child: Text(
-                        _isRegistering ? 'Уже зарегистрированы? Войти' : 'Регистрация',
-                      ),
-                    ),
-                  ],
-                ),
+                child: _isRegistering ? _buildRegisterForm() : _buildLoginForm(),
               ),
             ),
           ),
@@ -216,7 +241,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-
 class RegionsScreen extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
@@ -230,67 +254,7 @@ class RegionsScreen extends StatelessWidget {
     }
 }
 
-// Авторизация
 final AuthService authService = AuthService();
-
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Авторизация")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'E-mail'),
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Пароль'),
-              obscureText: true,
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                var user = await authService.loginUser(_emailController.text, _passwordController.text);
-                if (user != null) {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
-                } else {
-                  // Обработка ошибок
-                }
-              },
-              child: Text('Войти'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                var user = await authService.registerUser(_emailController.text, _passwordController.text);
-                if (user != null) {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
-                } else {
-                  // Обработка ошибок
-                }
-              },
-              child: Text('Зарегистрироваться'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
