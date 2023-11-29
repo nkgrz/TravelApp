@@ -106,7 +106,7 @@ class RegionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Выбор региона'),
+        title: const Text('Направления'),
       ),
       body: const RegionsList(), // Показывает плашки с регионами
     );
