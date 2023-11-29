@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:travel_app/screens/cart_screen.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import 'package:travel_app/screens/cart_screen.dart';
+import 'package:travel_app/screens/favourites_screen.dart';
 
 final AuthService authService = AuthService();
 List<RegionInfo> regions = [];
@@ -111,7 +112,8 @@ class _RegionsListState extends State<RegionsList> {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2, // Количество колонок
-          childAspectRatio: 1.06, // Соотношение сторон (ширина / высота) для каждой ячейки
+          childAspectRatio:
+              1.06, // Соотношение сторон (ширина / высота) для каждой ячейки
         ),
         itemCount: regions.length,
         itemBuilder: (context, index) {
@@ -121,7 +123,6 @@ class _RegionsListState extends State<RegionsList> {
     );
   }
 }
-
 
 class RegionDetailScreen extends StatelessWidget {
   final RegionInfo regionInfo;
@@ -148,6 +149,9 @@ class RegionDetailScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Кнопка избранное
+                FavoriteButton(regionInfo: regionInfo),
+                // Кнопка добавить в корзину
                 ElevatedButton(
                   onPressed: () {
                     if (authService.currentUser == null) {
@@ -164,6 +168,7 @@ class RegionDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -176,4 +181,40 @@ Future<List<RegionInfo>> loadRegionsFromJson(BuildContext context) async {
       await DefaultAssetBundle.of(context).loadString('assets/regions.json');
   final List<dynamic> jsonList = json.decode(jsonStr);
   return jsonList.map((json) => RegionInfo.fromJson(json)).toList();
+}
+
+class FavoriteButton extends StatefulWidget {
+  final RegionInfo regionInfo;
+
+  const FavoriteButton({Key? key, required this.regionInfo}) : super(key: key);
+
+  @override
+  _FavoriteButtonState createState() => _FavoriteButtonState();
+}
+
+class _FavoriteButtonState extends State<FavoriteButton> {
+  bool isFavorite = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: IconButton(
+        onPressed: () {
+          setState(() {
+            isFavorite = !isFavorite;
+            if (isFavorite) {
+              favouritesRegionID.add(widget.regionInfo.id);
+            } else {
+              favouritesRegionID.remove(widget.regionInfo.id);
+            }
+          });
+        },
+        icon: Icon(
+          isFavorite ? Icons.favorite : Icons.favorite_border,
+        ),
+      ),
+    );
+  }
 }

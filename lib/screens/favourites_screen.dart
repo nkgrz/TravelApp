@@ -37,8 +37,8 @@ class _FavouritesListState extends State<FavouritesList> {
                         (region) => region.id == favouritesRegionID.elementAt(index));
 
                     String description = regionInfo.description;
-                    if (description.length > 30) {
-                      description = '${description.substring(0, 30)}...';
+                    if (description.length > 35) {
+                      description = '${description.substring(0, 35)}...';
                     }
 
                     return Column(

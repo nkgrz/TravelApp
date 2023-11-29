@@ -65,8 +65,8 @@ class _CartListState extends State<CartList> {
                         regions.firstWhere((region) => region.id == regionId);
 
                     String description = regionInfo.description;
-                    if (description.length > 30) {
-                      description = '${description.substring(0, 30)}...';
+                    if (description.length > 35) {
+                      description = '${description.substring(0, 35)}...';
                     }
 
                     return Column(
@@ -102,10 +102,19 @@ class _CartListState extends State<CartList> {
                                     ),
                                     const SizedBox(height: 5),
                                     // Описание товара
-                                    Text(
-                                      description,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w400),
+                                    SizedBox(
+                                      height:
+                                          // Если Название слишком большое и количество 2 и больше,
+                                          // то сократить место под описание(иначе с Санкт-Петербургом проблемы)
+                                          (regionInfo.name.length > 14 &&
+                                                  ((quantity ?? 1) > 1))
+                                              ? 15
+                                              : 30,
+                                      child: Text(
+                                        description,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     ),
                                     const SizedBox(height: 5),
                                     // Цена товара
@@ -155,7 +164,7 @@ class _CartListState extends State<CartList> {
                                         ),
                                       ),
                                     ),
-                                    
+
                                     const SizedBox(height: 10),
                                     // Кнопки + -
                                     Row(
@@ -241,7 +250,7 @@ class _CartListState extends State<CartList> {
                   'Итого: ${NumberFormat("#,###", "ru").format(getTotalCost())} ₽'),
               ElevatedButton(
                 onPressed: () {
-                  // Реализация кнопки "Оформить заказ" 
+                  // Реализация кнопки "Оформить заказ"
                 },
                 child: const Text('Оформить заказ'),
               ),
