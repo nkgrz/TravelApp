@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/screens/cart_screen.dart';
 import 'dart:convert';
 import '../services/auth_service.dart';
-final AuthService authService = AuthService();
 
+final AuthService authService = AuthService();
+List<RegionInfo> regions = [];
 
 class RegionCard extends StatelessWidget {
   final RegionInfo regionInfo;
 
-  RegionCard({required this.regionInfo});
+  const RegionCard({super.key, required this.regionInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class RegionCard extends StatelessWidget {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
                 ),
@@ -40,10 +42,11 @@ class RegionCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(6.0), // высота подложки для названий карточек
+                padding: const EdgeInsets.all(
+                    6.0), // высота подложки для названий карточек
                 child: Text(
                   regionInfo.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -58,33 +61,39 @@ class RegionCard extends StatelessWidget {
 }
 
 class RegionInfo {
+  final int id;
   final String name;
   final String description;
   final String imageAsset;
+  final double price;
 
   RegionInfo({
+    required this.id,
     required this.name,
     required this.description,
     required this.imageAsset,
+    required this.price,
   });
 
   factory RegionInfo.fromJson(Map<String, dynamic> json) {
     return RegionInfo(
+      id: json['id'],
       name: json['name'],
       description: json['description'],
       imageAsset: json['imageAsset'],
+      price: json['price'].toDouble(),
     );
   }
 }
 
 class RegionsList extends StatefulWidget {
+  const RegionsList({super.key});
+
   @override
   _RegionsListState createState() => _RegionsListState();
 }
 
 class _RegionsListState extends State<RegionsList> {
-  List<RegionInfo> regions = [];
-
   @override
   void initState() {
     super.initState();
@@ -99,10 +108,12 @@ class _RegionsListState extends State<RegionsList> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0), // отступы сверху, снизу и по бокам
-      child: ListView.separated(
-        scrollDirection: Axis.vertical,
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Количество колонок
+          childAspectRatio: 1.06, // Соотношение сторон (ширина / высота) для каждой ячейки
+        ),
         itemCount: regions.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 0.0), // Отступ между карточками
         itemBuilder: (context, index) {
           return RegionCard(regionInfo: regions[index]);
         },
@@ -111,54 +122,58 @@ class _RegionsListState extends State<RegionsList> {
   }
 }
 
+
 class RegionDetailScreen extends StatelessWidget {
   final RegionInfo regionInfo;
-
-  RegionDetailScreen({required this.regionInfo});
+  final cartlist = const CartList();
+  const RegionDetailScreen({super.key, required this.regionInfo});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text(regionInfo.name),
-        ),
-        body: SingleChildScrollView(
-            child: Column(
-                children: [
-                    Image.asset(regionInfo.imageAsset),
-                    Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                            regionInfo.description,
-                            style: TextStyle(fontSize: 18),
-                        ),
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                            ElevatedButton(
-                            onPressed: () {
-                                if (authService.currentUser == null) {
-                                    Navigator.of(context).pushNamed('/profile'); // или другой маршрут к экрану авторизации
-                                } else {
-                                    // Добавить продукт в корзину
-                                }
-                            },
-                            child: Text('Добавить в корзину'),
-                            ),
-                        ],
-                    ),
-                ],
+      appBar: AppBar(
+        title: Text(regionInfo.name),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset(regionInfo.imageAsset),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                regionInfo.description,
+                style: const TextStyle(fontSize: 18),
+              ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    if (authService.currentUser == null) {
+                      Navigator.of(context).pushNamed(
+                          '/profile'); // или другой маршрут к экрану авторизации
+                    } else {
+                      // Добавить продукт в корзину
+                      // cartRegionID.add(regionInfo.id);
+                      addToCart(regionInfo.id);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('Добавить в корзину'),
+                ),
+              ],
+            ),
+          ],
         ),
+      ),
     );
-
   }
 }
 
-
 Future<List<RegionInfo>> loadRegionsFromJson(BuildContext context) async {
-  final String jsonStr = await DefaultAssetBundle.of(context).loadString('assets/regions.json');
+  final String jsonStr =
+      await DefaultAssetBundle.of(context).loadString('assets/regions.json');
   final List<dynamic> jsonList = json.decode(jsonStr);
   return jsonList.map((json) => RegionInfo.fromJson(json)).toList();
 }

@@ -5,6 +5,8 @@ import '../services/auth_service.dart';
 final AuthService authService = AuthService();
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
     @override
     _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -33,25 +35,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget _buildLoginForm() {
         return Column(
             children: [
-                Text("Вход", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                const Text("Вход", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(labelText: 'E-mail'),
+                    decoration: const InputDecoration(labelText: 'E-mail'),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                     controller: _passwordController,
-                    decoration: InputDecoration(labelText: 'Пароль'),
+                    decoration: const InputDecoration(labelText: 'Пароль'),
                     obscureText: true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                     onPressed: _handleLogin,
-                    child: Text('Войти'),
+                    child: const Text('Войти'),
                 ),
                 TextButton(
                     onPressed: () => setState(() => _isRegistering = true),
-                    child: Text('Регистрация'),
+                    child: const Text('Регистрация'),
                 ),
             ],
         );
@@ -60,30 +62,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget _buildRegisterForm() {
         return Column(
             children: [
-                Text("Регистрация", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)), 
+                const Text("Регистрация", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)), 
                 TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(labelText: 'Имя'),
+                    decoration: const InputDecoration(labelText: 'Имя'),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(labelText: 'E-mail'),
+                    decoration: const InputDecoration(labelText: 'E-mail'),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                     controller: _passwordController,
-                    decoration: InputDecoration(labelText: 'Пароль'),
+                    decoration: const InputDecoration(labelText: 'Пароль'),
                     obscureText: true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                     onPressed: _handleRegister,
-                    child: Text('Зарегистрироваться'),
+                    child: const Text('Зарегистрироваться'),
                 ),
                 TextButton(
                     onPressed: () => setState(() => _isRegistering = false),
-                    child: Text('Уже зарегистрированы? Войти'),
+                    child: const Text('Уже зарегистрированы? Войти'),
                 ),
             ],
         );
@@ -96,13 +98,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                 ),
-                title: Center(
+                title: const Center(
                     child: Text('Ошибка'),
                 ),
                 content: Text(message),
                 actions: <Widget>[
                     TextButton(
-                        child: Text('Ок'),
+                        child: const Text('Ок'),
                         onPressed: () {
                             Navigator.of(ctx).pop();
                         },
@@ -192,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (_currentUser == null) {
         return Scaffold(
             appBar: AppBar(
-            title: Text("Профиль"),
+            title: const Text("Профиль"),
             ),
             body: Center(
             child: SingleChildScrollView(
@@ -211,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
         } else {
         return Scaffold(
-            appBar: AppBar(title: Text("Профиль")),
+            appBar: AppBar(title: const Text("Профиль")),
             body: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -224,7 +226,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _currentUser = null;
                     });
                     },
-                    child: Text('Выйти'),
+                    child: const Text('Выйти'),
                 ),
                 ],
             ),
