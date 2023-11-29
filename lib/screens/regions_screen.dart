@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'package:travel_app/screens/cart_screen.dart';
-import 'package:travel_app/screens/favourites_screen.dart';
 
 final AuthService authService = AuthService();
 List<RegionInfo> regions = [];
@@ -159,7 +158,6 @@ class RegionDetailScreen extends StatelessWidget {
                           '/profile'); // или другой маршрут к экрану авторизации
                     } else {
                       // Добавить продукт в корзину
-                      // cartRegionID.add(regionInfo.id);
                       addToCart(regionInfo.id);
                       Navigator.of(context).pop();
                     }
@@ -168,7 +166,7 @@ class RegionDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -182,39 +180,3 @@ Future<List<RegionInfo>> loadRegionsFromJson(BuildContext context) async {
   final List<dynamic> jsonList = json.decode(jsonStr);
   return jsonList.map((json) => RegionInfo.fromJson(json)).toList();
 }
-
-// class FavoriteButton extends StatefulWidget {
-//   final RegionInfo regionInfo;
-
-//   const FavoriteButton({Key? key, required this.regionInfo}) : super(key: key);
-
-//   @override
-//   _FavoriteButtonState createState() => _FavoriteButtonState();
-// }
-
-// class _FavoriteButtonState extends State<FavoriteButton> {
-//   bool isFavorite = false;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       width: 40,
-//       height: 40,
-//       child: IconButton(
-//         onPressed: () {
-//           setState(() {
-//             isFavorite = !isFavorite;
-//             if (isFavorite) {
-//               favouritesRegionID.add(widget.regionInfo.id);
-//             } else {
-//               favouritesRegionID.remove(widget.regionInfo.id);
-//             }
-//           });
-//         },
-//         icon: Icon(
-//           isFavorite ? Icons.favorite : Icons.favorite_border,
-//         ),
-//       ),
-//     );
-//   }
-// }

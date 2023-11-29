@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/screens/favourites_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/services/local_data.dart';
 
-// List<int> cartRegionID = [];
 Map<int, int> cartItems = {};
 
 // Метод для добавления товара в корзину
@@ -15,6 +15,7 @@ void addToCart(int regionId) {
     // Если товара нет в корзине, добавляем его с количеством 1
     cartItems[regionId] = 1;
   }
+  saveCartItems();
 }
 
 // Метод для удаления товара из корзины
@@ -27,6 +28,7 @@ void removeFromCart(int regionId) {
       cartItems.remove(regionId);
     }
   }
+   saveCartItems();
 }
 
 class CartList extends StatefulWidget {
@@ -134,36 +136,6 @@ class _CartListState extends State<CartList> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     // Кнопка избранное
-                                    // SizedBox(
-                                    //   width: 40,
-                                    //   height: 40,
-                                    //   child: IconButton(
-                                    //     onPressed: () {
-                                    //       if (favouritesRegionID
-                                    //           .contains(regionInfo.id)) {
-                                    //         // Если элемент находится в избранном, удаляем его из избранного
-                                    //         setState(() {
-                                    //           favouritesRegionID
-                                    //               .remove(regionInfo.id);
-                                    //         });
-                                    //       } else {
-                                    //         // Если элемент не находится в избранном, добавляем его в избранное
-                                    //         setState(() {
-                                    //           favouritesRegionID
-                                    //               .add(regionInfo.id);
-                                    //         });
-                                    //       }
-                                    //     },
-                                    //     icon: Icon(
-                                    //       favouritesRegionID
-                                    //               .contains(regionInfo.id)
-                                    //           ? Icons
-                                    //               .favorite // Если в избранном
-                                    //           : Icons
-                                    //               .favorite_border, // Если не в избранном
-                                    //     ),
-                                    //   ),
-                                    // ),
                                     FavoriteButton(regionId: regionInfo.id),
 
                                     const SizedBox(height: 10),
@@ -293,6 +265,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
             favouritesRegionID.add(widget.regionId);
           }
           isFavorite = !isFavorite;
+          saveFavouritesItems();
         });
       },
       icon: Icon(

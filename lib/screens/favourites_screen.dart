@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/screens/cart_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_app/services/local_data.dart';
 
 Set<int> favouritesRegionID = {};
 
@@ -116,6 +117,7 @@ class _FavouritesListState extends State<FavouritesList> {
                                         onPressed: () {
                                           setState(() {
                                             favouritesRegionID.remove(regionInfo.id);
+                                            saveFavouritesItems();
                                           });
                                         },
                                         icon: const Icon(Icons.delete),
