@@ -150,7 +150,7 @@ class RegionDetailScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Кнопка избранное
-                FavoriteButton(regionInfo: regionInfo),
+                FavoriteButton(regionId: regionInfo.id),
                 // Кнопка добавить в корзину
                 ElevatedButton(
                   onPressed: () {
@@ -183,38 +183,38 @@ Future<List<RegionInfo>> loadRegionsFromJson(BuildContext context) async {
   return jsonList.map((json) => RegionInfo.fromJson(json)).toList();
 }
 
-class FavoriteButton extends StatefulWidget {
-  final RegionInfo regionInfo;
+// class FavoriteButton extends StatefulWidget {
+//   final RegionInfo regionInfo;
 
-  const FavoriteButton({Key? key, required this.regionInfo}) : super(key: key);
+//   const FavoriteButton({Key? key, required this.regionInfo}) : super(key: key);
 
-  @override
-  _FavoriteButtonState createState() => _FavoriteButtonState();
-}
+//   @override
+//   _FavoriteButtonState createState() => _FavoriteButtonState();
+// }
 
-class _FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false;
+// class _FavoriteButtonState extends State<FavoriteButton> {
+//   bool isFavorite = false;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 40,
-      height: 40,
-      child: IconButton(
-        onPressed: () {
-          setState(() {
-            isFavorite = !isFavorite;
-            if (isFavorite) {
-              favouritesRegionID.add(widget.regionInfo.id);
-            } else {
-              favouritesRegionID.remove(widget.regionInfo.id);
-            }
-          });
-        },
-        icon: Icon(
-          isFavorite ? Icons.favorite : Icons.favorite_border,
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       width: 40,
+//       height: 40,
+//       child: IconButton(
+//         onPressed: () {
+//           setState(() {
+//             isFavorite = !isFavorite;
+//             if (isFavorite) {
+//               favouritesRegionID.add(widget.regionInfo.id);
+//             } else {
+//               favouritesRegionID.remove(widget.regionInfo.id);
+//             }
+//           });
+//         },
+//         icon: Icon(
+//           isFavorite ? Icons.favorite : Icons.favorite_border,
+//         ),
+//       ),
+//     );
+//   }
+// }

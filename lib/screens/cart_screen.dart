@@ -134,36 +134,37 @@ class _CartListState extends State<CartList> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     // Кнопка избранное
-                                    SizedBox(
-                                      width: 40,
-                                      height: 40,
-                                      child: IconButton(
-                                        onPressed: () {
-                                          if (favouritesRegionID
-                                              .contains(regionInfo.id)) {
-                                            // Если элемент находится в избранном, удаляем его из избранного
-                                            setState(() {
-                                              favouritesRegionID
-                                                  .remove(regionInfo.id);
-                                            });
-                                          } else {
-                                            // Если элемент не находится в избранном, добавляем его в избранное
-                                            setState(() {
-                                              favouritesRegionID
-                                                  .add(regionInfo.id);
-                                            });
-                                          }
-                                        },
-                                        icon: Icon(
-                                          favouritesRegionID
-                                                  .contains(regionInfo.id)
-                                              ? Icons
-                                                  .favorite // Если в избранном
-                                              : Icons
-                                                  .favorite_border, // Если не в избранном
-                                        ),
-                                      ),
-                                    ),
+                                    // SizedBox(
+                                    //   width: 40,
+                                    //   height: 40,
+                                    //   child: IconButton(
+                                    //     onPressed: () {
+                                    //       if (favouritesRegionID
+                                    //           .contains(regionInfo.id)) {
+                                    //         // Если элемент находится в избранном, удаляем его из избранного
+                                    //         setState(() {
+                                    //           favouritesRegionID
+                                    //               .remove(regionInfo.id);
+                                    //         });
+                                    //       } else {
+                                    //         // Если элемент не находится в избранном, добавляем его в избранное
+                                    //         setState(() {
+                                    //           favouritesRegionID
+                                    //               .add(regionInfo.id);
+                                    //         });
+                                    //       }
+                                    //     },
+                                    //     icon: Icon(
+                                    //       favouritesRegionID
+                                    //               .contains(regionInfo.id)
+                                    //           ? Icons
+                                    //               .favorite // Если в избранном
+                                    //           : Icons
+                                    //               .favorite_border, // Если не в избранном
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    FavoriteButton(regionId: regionInfo.id),
 
                                     const SizedBox(height: 10),
                                     // Кнопки + -
@@ -258,6 +259,46 @@ class _CartListState extends State<CartList> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class FavoriteButton extends StatefulWidget {
+  final int regionId;
+
+  const FavoriteButton({Key? key, required this.regionId}) : super(key: key);
+
+  @override
+  _FavoriteButtonState createState() => _FavoriteButtonState();
+}
+
+class _FavoriteButtonState extends State<FavoriteButton> {
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Установите начальное состояние isFavorite на основе favouritesRegionID
+    isFavorite = favouritesRegionID.contains(widget.regionId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        setState(() {
+          if (isFavorite) {
+            favouritesRegionID.remove(widget.regionId);
+          } else {
+            favouritesRegionID.add(widget.regionId);
+          }
+          isFavorite = !isFavorite;
+        });
+      },
+      icon: Icon(
+        isFavorite ? Icons.favorite : Icons.favorite_border,
+        // color: Colors.red, // Вы можете установить свой цвет
+      ),
     );
   }
 }
