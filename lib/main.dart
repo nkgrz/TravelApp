@@ -26,9 +26,9 @@ class TravelAgencyApp extends StatelessWidget {
           bodyLarge: TextStyle(height: 1.2),
           bodyMedium: TextStyle(height: 1.2),
         ),
-        appBarTheme: const AppBarTheme(
+        appBarTheme: AppBarTheme(
           toolbarHeight: 40.0, // Высота AppBar
-          color: Colors.amber, // Цвет AppBar
+          color: Colors.amber[300], // Цвет AppBar
           shadowColor: Colors.black, // Цвет тени
           elevation: 4, // высота тени
         ),
