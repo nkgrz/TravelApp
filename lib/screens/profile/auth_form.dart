@@ -1,4 +1,3 @@
-// Импорт необходимых библиотек
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/services/auth_service.dart';
@@ -18,11 +17,11 @@ class AuthForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AuthFormState createState() => _AuthFormState();
+  AuthFormState createState() => AuthFormState();
 }
 
 // Состояние виджета формы аутентификации
-class _AuthFormState extends State<AuthForm> {
+class AuthFormState extends State<AuthForm> {
   final _emailController = TextEditingController(); // Контроллер для поля ввода e-mail
   final _passwordController = TextEditingController(); // Контроллер для поля ввода пароля
   final _nameController = TextEditingController(); // Контроллер для поля ввода имени пользователя

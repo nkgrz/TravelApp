@@ -28,7 +28,7 @@ void removeFromCart(int regionId) {
       cartItems.remove(regionId);
     }
   }
-   saveCartItems();
+  saveCartItems();
 }
 
 class CartList extends StatefulWidget {
@@ -108,8 +108,10 @@ class _CartListState extends State<CartList> {
                                       height:
                                           // Если Название слишком большое и количество 2 и больше,
                                           // то сократить место под описание(иначе с Санкт-Петербургом проблемы)
-                                          (regionInfo.name.length > 14 &&
-                                                  ((quantity ?? 1) > 1))
+                                          (regionInfo.name.length > 14 ||
+                                                  (regionInfo.name.length >
+                                                          14 &&
+                                                      ((quantity ?? 1) > 1)))
                                               ? 15
                                               : 30,
                                       child: Text(
@@ -241,10 +243,10 @@ class FavoriteButton extends StatefulWidget {
   const FavoriteButton({Key? key, required this.regionId}) : super(key: key);
 
   @override
-  _FavoriteButtonState createState() => _FavoriteButtonState();
+  FavoriteButtonState createState() => FavoriteButtonState();
 }
 
-class _FavoriteButtonState extends State<FavoriteButton> {
+class FavoriteButtonState extends State<FavoriteButton> {
   bool isFavorite = false;
 
   @override

@@ -4,15 +4,14 @@ import 'auth_form.dart';
 import 'edit_profile_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  ProfileScreenState createState() => ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class ProfileScreenState extends State<ProfileScreen> {
   // Текущий аутентифицированный пользователь.
   User? _currentUser = AuthService().currentUser;
   // Состояние, указывающее на то, находится ли пользователь в режиме регистрации.
@@ -31,7 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Построение виджета, который отображает информацию профиля пользователя.
   Widget _buildProfileView() {
     return Scaffold(
-      appBar: AppBar(title: const Text("Профиль")),
+      appBar: AppBar(
+          title: const Text("Профиль",
+              style: TextStyle(fontWeight: FontWeight.w500))),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -43,15 +44,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 radius: 50,
                 backgroundImage: _currentUser!.photoURL != null
                     ? NetworkImage(_currentUser!.photoURL!)
-                    : const AssetImage("assets/default_avatar.png") as ImageProvider,
+                    : const AssetImage("assets/default_avatar.png")
+                        as ImageProvider,
               ),
               const SizedBox(height: 20),
               // Отображение имени или email пользователя.
               Text(
                 'Привет, ${_currentUser!.displayName ?? _currentUser!.email}!',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               // Отображение email пользователя.
               Text(_currentUser!.email ?? 'Нет адреса электронной почты',
                   style: TextStyle(color: Colors.grey[600])),
@@ -64,13 +67,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: const Text('Выйти'),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               // Кнопка для перехода к редактированию профиля.
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => EditProfileScreen(currentUser: _currentUser!),
+                      builder: (context) =>
+                          EditProfileScreen(currentUser: _currentUser!),
                     ),
                   );
                 },
@@ -101,7 +105,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // AuthForm используется для входа или регистрации пользователя.
               child: AuthForm(
                 isRegistering: _isRegistering,
-                onFormSwitch: (isRegistering) => setState(() => _isRegistering = isRegistering),
+                onFormSwitch: (isRegistering) =>
+                    setState(() => _isRegistering = isRegistering),
                 onAuthSuccess: _updateAuthState,
               ),
             ),

@@ -21,12 +21,22 @@ class TravelAgencyApp extends StatelessWidget {
     return MaterialApp(
       home: const MainScreen(),
       theme: ThemeData(
+        textTheme: const TextTheme(
+          // Межстрочный интервал(после обновления Flutter по умолчанию 1.5 или 2 по ощущениям)
+          bodyLarge: TextStyle(height: 1.2),
+          bodyMedium: TextStyle(height: 1.2),
+        ),
         appBarTheme: const AppBarTheme(
           toolbarHeight: 40.0, // Высота AppBar
           color: Colors.amber, // Цвет AppBar
+          shadowColor: Colors.black, // Цвет тени
+          elevation: 4, // высота тени
         ),
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // тень AppBar
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            // backgroundColor: const Color.fromARGB(255, 58, 104, 185),
+            // textStyle: const TextStyle(color: Colors.white),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -47,10 +57,10 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _tabs = [
@@ -106,7 +116,8 @@ class RegionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Направления'),
+        title: const Text('Направления',
+            style: TextStyle(fontWeight: FontWeight.w500)),
       ),
       body: const RegionsList(), // Показывает плашки с регионами
     );
@@ -120,14 +131,12 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Корзина'),
+          title: const Text('Корзина',
+              style: TextStyle(fontWeight: FontWeight.w500)),
         ),
         body: const Padding(
           // Отступ между AppBar и первым элементом
-          padding: EdgeInsets.only(
-              top: 10,
-              left: 7,
-              right: 7), 
+          padding: EdgeInsets.only(top: 10, left: 7, right: 7),
           child: CartList(),
         ));
   }
@@ -140,14 +149,12 @@ class Favourites extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Избранное'),
+          title: const Text('Избранное',
+              style: TextStyle(fontWeight: FontWeight.w500)),
         ),
         body: const Padding(
           // Отступ между AppBar и первым элементом
-          padding: EdgeInsets.only(
-              top: 10,
-              left: 7,
-              right: 7),
+          padding: EdgeInsets.only(top: 10, left: 7, right: 7),
           child: FavouritesList(),
         ));
   }

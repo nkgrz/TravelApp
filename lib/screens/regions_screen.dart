@@ -43,7 +43,7 @@ class RegionCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(
-                    6.0), // высота подложки для названий карточек
+                    5.5), // Отступы от текста со всех сторон в названии карточки
                 child: Text(
                   regionInfo.name,
                   style: const TextStyle(
@@ -90,10 +90,10 @@ class RegionsList extends StatefulWidget {
   const RegionsList({super.key});
 
   @override
-  _RegionsListState createState() => _RegionsListState();
+  RegionsListState createState() => RegionsListState();
 }
 
-class _RegionsListState extends State<RegionsList> {
+class RegionsListState extends State<RegionsList> {
   @override
   void initState() {
     super.initState();

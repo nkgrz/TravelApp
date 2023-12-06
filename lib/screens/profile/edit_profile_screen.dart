@@ -1,4 +1,3 @@
-// Импорт необходимых библиотек
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_app/services/auth_service.dart';
@@ -16,11 +15,11 @@ class EditProfileScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _EditProfileScreenState createState() => _EditProfileScreenState();
+  EditProfileScreenState createState() => EditProfileScreenState();
 }
 
 // Состояние виджета редактирования профиля пользователя
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class EditProfileScreenState extends State<EditProfileScreen> {
   final _displayNameController = TextEditingController(); // Контроллер для поля ввода имени
   final _emailController = TextEditingController(); // Контроллер для поля ввода e-mail
   final _oldPasswordController = TextEditingController(); // Контроллер для поля ввода старого пароля
@@ -107,8 +106,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   // Выбор изображения из галереи и его загрузка
   Future<void> _pickAndUploadImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image == null) return;
 
@@ -118,7 +117,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       final ref = FirebaseStorage.instance
           .ref()
           .child('user_images')
-          .child(widget.currentUser.uid + '.jpg');
+          .child('${widget.currentUser.uid}.jpg');
 
       // Загрузка изображения
       await ref.putFile(imageFile);
