@@ -1,35 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/screens/favourites_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:intl/intl.dart';
-import 'package:travel_app/services/local_data.dart';
+import 'package:travel_app/utils/add_remove_from_cart.dart';
+import 'package:travel_app/widgets/favorite_button.dart';
+import 'package:travel_app/widgets/product_info_widget.dart';
+import 'package:travel_app/widgets/quantity_control_widget.dart';
 
 Map<int, int> cartItems = {};
-
-// Метод для добавления товара в корзину
-void addToCart(int regionId) {
-  if (cartItems.containsKey(regionId)) {
-    // Если товар уже есть в корзине, увеличиваем количество на 1
-    cartItems[regionId] = (cartItems[regionId] ?? 0) + 1;
-  } else {
-    // Если товара нет в корзине, добавляем его с количеством 1
-    cartItems[regionId] = 1;
-  }
-  saveCartItems();
-}
-
-// Метод для удаления товара из корзины
-void removeFromCart(int regionId) {
-  if (cartItems.containsKey(regionId)) {
-    // Уменьшаем количество на 1
-    cartItems[regionId] = (cartItems[regionId] ?? 0) - 1;
-    if (cartItems[regionId] != null && cartItems[regionId]! <= 0) {
-      // Если количество достигло 0 или меньше, удаляем товар из корзины
-      cartItems.remove(regionId);
-    }
-  }
-  saveCartItems();
-}
 
 class CartList extends StatefulWidget {
   const CartList({super.key});
@@ -79,60 +56,20 @@ class _CartListState extends State<CartList> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.asset(
-                                  regionInfo.imageAsset,
-                                  height: 80,
-                                  width: 140,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              // Картинка региона
+                              ProductImageWidget(
+                                  imageAsset: regionInfo.imageAsset),
+
+                              // Отутуп от картинки до названия, описания и цены товара
                               const SizedBox(width: 10),
+
                               // Название, цена и описание товара
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // Название товара
-                                    Text(
-                                      regionInfo.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    // Описание товара
-                                    SizedBox(
-                                      height:
-                                          // Если Название слишком большое и количество 2 и больше,
-                                          // то сократить место под описание(иначе с Санкт-Петербургом проблемы)
-                                          (regionInfo.name.length > 14 ||
-                                                  (regionInfo.name.length >
-                                                          14 &&
-                                                      ((quantity ?? 1) > 1)))
-                                              ? 15
-                                              : 30,
-                                      child: Text(
-                                        description,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    // Цена товара
-                                    Text(
-                                      '${NumberFormat("#,###", "ru").format(regionInfo.price.toInt())} ₽',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 70),
-                                  ],
-                                ),
-                              ),
+                              ProductDetailsWidget(
+                                  name: regionInfo.name,
+                                  description: description,
+                                  price: regionInfo.price,
+                                  quantity: (quantity ?? 1)),
+
                               // Кнопки избранное и + -
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -141,70 +78,21 @@ class _CartListState extends State<CartList> {
                                     FavoriteButton(regionId: regionInfo.id),
 
                                     const SizedBox(height: 10),
-                                    // Кнопки + -
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        // Кнопка "-" для уменьшения количества
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              removeFromCart(regionId);
-                                            });
-                                          },
-                                          child: Container(
-                                            width:
-                                                24, // Установка ширины и высоты  кнопки
-                                            height: 24,
-                                            decoration: BoxDecoration(
-                                              color: Colors
-                                                  .grey, // Цвет фона кнопки
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      8.0), // Форма кнопки
-                                            ),
-                                            child: const Icon(
-                                              Icons.remove,
-                                              color:
-                                                  Colors.white, // Цвет иконки
-                                              size: 16, // Размер иконки
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        // Количество товара
-                                        Text('$quantity'),
-                                        const SizedBox(width: 4),
 
-                                        // Кнопка "+" для увеличения количества
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              addToCart(regionId);
-                                            });
-                                          },
-                                          child: Container(
-                                            width:
-                                                24, // Установите желаемую ширину и высоту для кнопки
-                                            height: 24,
-                                            decoration: BoxDecoration(
-                                              color: Colors
-                                                  .grey, // Цвет фона кнопки
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      8.0), // Форма кнопки
-                                            ),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color:
-                                                  Colors.white, // Цвет иконки
-                                              size: 16, // Размер иконки
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
+                                    // Кнопки + -
+                                    QuantityControlWidget(
+                                      quantity: (quantity ?? 1),
+                                      onAdd: () {
+                                        setState(() {
+                                          addToCart(regionId);
+                                        });
+                                      },
+                                      onRemove: () {
+                                        setState(() {
+                                          removeFromCart(regionId);
+                                        });
+                                      },
+                                    ),
                                   ]),
                             ],
                           ),
@@ -216,6 +104,8 @@ class _CartListState extends State<CartList> {
                   },
                 ),
         ),
+
+        // Сумма заказа и кнопка оформить заказ
         Padding(
           padding: const EdgeInsets.all(3.0),
           child: Row(
@@ -233,47 +123,6 @@ class _CartListState extends State<CartList> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class FavoriteButton extends StatefulWidget {
-  final int regionId;
-
-  const FavoriteButton({Key? key, required this.regionId}) : super(key: key);
-
-  @override
-  FavoriteButtonState createState() => FavoriteButtonState();
-}
-
-class FavoriteButtonState extends State<FavoriteButton> {
-  bool isFavorite = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Установите начальное состояние isFavorite на основе favouritesRegionID
-    isFavorite = favouritesRegionID.contains(widget.regionId);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        setState(() {
-          if (isFavorite) {
-            favouritesRegionID.remove(widget.regionId);
-          } else {
-            favouritesRegionID.add(widget.regionId);
-          }
-          isFavorite = !isFavorite;
-          saveFavouritesItems();
-        });
-      },
-      icon: Icon(
-        isFavorite ? Icons.favorite : Icons.favorite_border,
-        // color: Colors.red, // Вы можете установить свой цвет
-      ),
     );
   }
 }

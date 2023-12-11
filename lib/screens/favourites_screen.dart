@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/screens/cart_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
-import 'package:intl/intl.dart';
 import 'package:travel_app/services/local_data.dart';
+import 'package:travel_app/utils/add_remove_from_cart.dart';
+import 'package:travel_app/widgets/cart_and_favorite_buttons_widget.dart';
+import 'package:travel_app/widgets/product_info_widget.dart';
 
 Set<int> favouritesRegionID = {};
 
@@ -34,8 +35,8 @@ class _FavouritesListState extends State<FavouritesList> {
               : ListView.builder(
                   itemCount: favouritesRegionID.length,
                   itemBuilder: (context, index) {
-                    final regionInfo = regions.firstWhere(
-                        (region) => region.id == favouritesRegionID.elementAt(index));
+                    final regionInfo = regions.firstWhere((region) =>
+                        region.id == favouritesRegionID.elementAt(index));
 
                     String description = regionInfo.description;
                     if (description.length > 30) {
@@ -50,82 +51,31 @@ class _FavouritesListState extends State<FavouritesList> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.asset(
-                                  regionInfo.imageAsset,
-                                  height: 80,
-                                  width: 140,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              // Картинка региона
+                              ProductImageWidget(
+                                  imageAsset: regionInfo.imageAsset),
                               const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      regionInfo.name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      description,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      '${NumberFormat("#,###", "ru").format(regionInfo.price.toInt())} ₽',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+
+                              // Название, цена и описание товара
+                              ProductDetailsWidget(
+                                  name: regionInfo.name,
+                                  description: description,
+                                  price: regionInfo.price,
+                                  quantity: 0),
+
+                              // Кнопки добавть в корзину и удалить из избранного
+                              CartAndFavoriteButtonsWidget(
+                                onAddToCart: (regionId) {
+                                  addToCart(regionId);
+                                },
+                                onDeleteFavorite: (regionId) {
+                                  setState(() {
+                                    favouritesRegionID.remove(regionId);
+                                    saveFavouritesItems();
+                                  });
+                                },
+                                regionId: regionInfo.id,
                               ),
-
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-
-                                children: [
-                                  
-                                  SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: 
-                                      IconButton(
-                                        onPressed: () {
-                                          // cartRegionID.add(regionInfo.id);
-                                          addToCart(regionInfo.id);
-                                        },
-                                        icon: const Icon(Icons.add_shopping_cart),
-                                      ),
-                                  ),
-
-                                  SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child:
-                                      IconButton(
-                                        // padding: const EdgeInsets.all(0),
-                                        onPressed: () {
-                                          setState(() {
-                                            favouritesRegionID.remove(regionInfo.id);
-                                            saveFavouritesItems();
-                                          });
-                                        },
-                                        icon: const Icon(Icons.delete),
-                                      ),
-                                  ),
-                                ],
-                              )
-                              
                             ],
                           ),
                         ),
