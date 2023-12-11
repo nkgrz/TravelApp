@@ -52,13 +52,15 @@ class ProductDetailsWidget extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           // Описание товара
+          // quantity = 0 подается из избранного, там больше места, поэтому виджет использую другой
+          // quantity = 1 или больше подается их корзины, там места меньше
           quantity == 0
               ? Text(
                   description,
                   style: const TextStyle(fontWeight: FontWeight.w400),
                 )
               : SizedBox(
-                  // Если Название слишком большое и количество 2 и больше,
+                  // Если название слишком большое и количество 2 и больше,
                   // то сократить место под описание(иначе с Санкт-Петербургом проблемы)
                   height:
                       (name.length > 14 || (name.length > 14 && quantity > 1))
