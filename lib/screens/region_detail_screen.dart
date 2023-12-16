@@ -58,6 +58,7 @@ class RegionDetailScreen extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
+                    // Отступы, размер кнопки
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           vertical: 2.0, horizontal: 20.0),
@@ -78,7 +79,7 @@ class RegionDetailScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 25.0),
+            const SizedBox(width: 40.0),
 
             // Подложка и кнопка "Избранное"
             Material(
