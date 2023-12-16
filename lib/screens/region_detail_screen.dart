@@ -31,45 +31,53 @@ class RegionDetailScreen extends StatelessWidget {
           ],
         ),
       ),
+
       // Нижняя подложка с кнопками "Добавить в корзину" и "Избранное"
       bottomNavigationBar: BottomAppBar(
-        color:
-            Colors.transparent,
+        color: Colors.transparent,
         elevation: 0, // Убираем стандартную тень
-        child: Material(
-          elevation: 5, // Тень для Material
-          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-          child: SizedBox(
-            height: 60,
-            child: ClipRRect(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Подложка и кнопка "Добавить в корзину"
+            Material(
+              elevation: 5, // Тень для Material
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-              child: Container(
-                color: Colors.amber[100],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Кнопка добавить в корзину
-                    ElevatedButton(
-                      onPressed: () {
-                        if (authService.currentUser == null) {
-                          Navigator.of(context).pushNamed('/profile');
-                        } else {
-                          // Добавить продукт в корзину
-                          addToCart(regionInfo.id);
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: const Text('Добавить в корзину'),
-                    ),
-
-                    const SizedBox(width: 25.0),
-                    // Кнопка избранное
-                    FavoriteButton(regionId: regionInfo.id),
-                  ],
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                child: Container(
+                  color: Colors.amber[100],
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (authService.currentUser == null) {
+                        Navigator.of(context).pushNamed('/profile');
+                      } else {
+                        // Добавить продукт в корзину
+                        addToCart(regionInfo.id);
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: const Text('Добавить в корзину'),
+                  ),
                 ),
               ),
             ),
-          ),
+
+            const SizedBox(width: 25.0),
+
+            // Подложка и кнопка "Избранное"
+            Material(
+              elevation: 5, // Тень для Material
+              borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                child: Container(
+                  color: Colors.amber[100],
+                  child: FavoriteButton(regionId: regionInfo.id),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
