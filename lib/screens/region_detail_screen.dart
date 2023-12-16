@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_app/models/regions.dart';
 import 'package:travel_app/screens/cart_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
@@ -57,7 +58,21 @@ class RegionDetailScreen extends StatelessWidget {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: const Text('Добавить в корзину'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 2.0, horizontal: 20.0),
+                      fixedSize: const Size.fromHeight(43.0),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Добавить в корзину'),
+                        Text(
+                            '+ ${NumberFormat("#,###", "ru").format(regionInfo.price)} ₽',
+                            style: const TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w400))
+                      ],
+                    ),
                   ),
                 ),
               ),
