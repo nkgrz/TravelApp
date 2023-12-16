@@ -46,34 +46,31 @@ class RegionDetailScreen extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(20.0)),
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                child: Container(
-                  color: Colors.amber[100],
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (authService.currentUser == null) {
-                        Navigator.of(context).pushNamed('/profile');
-                      } else {
-                        // Добавить продукт в корзину
-                        addToCart(regionInfo.id);
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    // Отступы, размер кнопки
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 2.0, horizontal: 20.0),
-                      fixedSize: const Size.fromHeight(43.0),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text('Добавить в корзину'),
-                        Text(
-                            '+ ${NumberFormat("#,###", "ru").format(regionInfo.price)} ₽',
-                            style: const TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w400))
-                      ],
-                    ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (authService.currentUser == null) {
+                      Navigator.of(context).pushNamed('/profile');
+                    } else {
+                      // Добавить продукт в корзину
+                      addToCart(regionInfo.id);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  // Отступы, размер кнопки
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 2.0, horizontal: 20.0),
+                    fixedSize: const Size.fromHeight(43.0),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Добавить в корзину'),
+                      Text(
+                          '+ ${NumberFormat("#,###", "ru").format(regionInfo.price)} ₽',
+                          style: const TextStyle(
+                              fontSize: 13, fontWeight: FontWeight.w400))
+                    ],
                   ),
                 ),
               ),

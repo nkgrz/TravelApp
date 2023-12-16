@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/utils/change_theme.dart';
 import 'auth_form.dart';
 import 'edit_profile_screen.dart';
 import 'package:travel_app/services/auth_service.dart';
@@ -31,8 +32,24 @@ class ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileView() {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Профиль",
-              style: TextStyle(fontWeight: FontWeight.w500))),
+        title: const Text("Профиль",
+            style: TextStyle(fontWeight: FontWeight.w500)),
+        leading: const ThemeSwitchButton(),
+        actions: [
+          // Кнопка для перехода к редактированию профиля.
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditProfileScreen(currentUser: _currentUser!),
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -58,7 +75,16 @@ class ProfileScreenState extends State<ProfileScreen> {
               // Отображение email пользователя.
               Text(_currentUser!.email ?? 'Нет адреса электронной почты',
                   style: TextStyle(color: Colors.grey[600])),
+
               const SizedBox(height: 20),
+              
+              // Мои заказы
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text('Мои заказы'),
+              ),
+
+              const SizedBox(height: 250),
               // Кнопка выхода из системы.
               ElevatedButton(
                 onPressed: () async {
@@ -66,19 +92,6 @@ class ProfileScreenState extends State<ProfileScreen> {
                   _updateAuthState(null);
                 },
                 child: const Text('Выйти'),
-              ),
-              const SizedBox(height: 20),
-              // Кнопка для перехода к редактированию профиля.
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          EditProfileScreen(currentUser: _currentUser!),
-                    ),
-                  );
-                },
-                child: const Text('Редактировать Профиль'),
               ),
             ],
           ),

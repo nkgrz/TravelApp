@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/screens/cart_screen.dart';
 import 'package:travel_app/screens/favourites_screen.dart';
 import 'package:travel_app/screens/profile/profile_screen.dart';
 import 'package:travel_app/services/local_data.dart';
+import 'package:travel_app/utils/change_theme.dart';
 import 'screens/regions_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -18,38 +20,22 @@ class TravelAgencyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const MainScreen(),
-      theme: ThemeData(
-        textTheme: const TextTheme(
-          // Межстрочный интервал(после обновления Flutter по умолчанию 1.5 или 2 по ощущениям)
-          bodyLarge: TextStyle(height: 1.2),
-          bodyMedium: TextStyle(height: 1.2),
-        ),
-        appBarTheme: AppBarTheme(
-          toolbarHeight: 40.0, // Высота AppBar
-          color: Colors.amber[300], // Цвет AppBar
-          shadowColor: Colors.black, // Цвет тени
-          elevation: 4, // высота тени
-        ),
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap, // тень AppBar
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            // backgroundColor: const Color.fromARGB(255, 58, 104, 185),
-            // textStyle: const TextStyle(color: Colors.white),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            // Стили других кнопок если потребуется прописать тут
-          ),
-        ),
-      ),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/profile': (context) => const ProfileScreen(),
-        // ... возможно, другие маршруты ...
-      },
-    );
+    return ChangeNotifierProvider(
+        create: (_) => ThemeProvider(), // Инициализация провайдера темы
+        child:
+            Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
+          return MaterialApp(
+            home: const MainScreen(),
+            theme: themeProvider.isDarkMode
+                ? MyAppTheme.darkTheme
+                : MyAppTheme.lightTheme,
+            debugShowCheckedModeBanner: false,
+            routes: {
+              '/profile': (context) => const ProfileScreen(),
+              // ... возможно, другие маршруты ...
+            },
+          );
+        }));
   }
 }
 
@@ -158,4 +144,54 @@ class Favourites extends StatelessWidget {
           child: FavouritesList(),
         ));
   }
+}
+
+class MyAppTheme {
+  // Параметры для светлой темы
+  static ThemeData lightTheme = ThemeData.light().copyWith(
+    // Межстрочный интервал(после обновления Flutter по умолчанию 1.5 или 2 по ощущениям)
+    // Поэтому вручную меняю на 1.2
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(height: 1.2, color: Colors.black),
+      bodyMedium: TextStyle(height: 1.2, color: Colors.black),
+    ),
+    appBarTheme: AppBarTheme(
+      toolbarHeight: 40.0,
+      color: Colors.amber[300],
+      shadowColor: Colors.black,
+      elevation: 4,
+    ),
+    // тень AppBar
+    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        // Стили других кнопок если потребуется прописать тут
+      ),
+    ),
+  );
+
+  // Параметры для темной темы
+  static ThemeData darkTheme = ThemeData.dark().copyWith(
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(height: 1.2),
+      bodyMedium: TextStyle(height: 1.2),
+    ),
+    appBarTheme: AppBarTheme(
+      toolbarHeight: 40.0,
+      color: Colors.grey[800],
+      shadowColor: Colors.black,
+      elevation: 4,
+    ),
+    // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+    ),
+  );
 }
