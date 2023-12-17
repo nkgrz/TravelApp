@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -47,7 +48,7 @@ class ThemeSwitchButton extends StatelessWidget {
         themeProvider.toggleTheme(); // Изменение темы при нажатии кнопки
       },
       icon: Icon(
-        themeProvider.isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
+        themeProvider.isDarkMode ? Icons.nightlight_round : CupertinoIcons.brightness_solid,
       ),
     );
   }
