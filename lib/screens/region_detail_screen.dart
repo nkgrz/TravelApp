@@ -1,10 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:travel_app/models/const.dart';
 import 'package:travel_app/models/regions.dart';
 import 'package:travel_app/screens/cart_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:travel_app/utils/add_remove_from_cart.dart';
 import 'package:travel_app/widgets/favorite_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class RegionDetailScreen extends StatelessWidget {
   final RegionInfo regionInfo;
@@ -20,7 +23,11 @@ class RegionDetailScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.asset(regionInfo.imageAsset),
+            CachedNetworkImage(
+              imageUrl: '$getImage${regionInfo.imageAsset}',
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(

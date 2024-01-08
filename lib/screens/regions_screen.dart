@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:travel_app/models/regions.dart';
-import 'package:travel_app/services/local_data.dart';
 import 'package:travel_app/widgets/region_card.dart';
-import '../services/auth_service.dart';
+import 'package:travel_app/services/auth_service.dart';
+import 'package:travel_app/services/download_regions.dart';
 
 final AuthService authService = AuthService();
 List<RegionInfo> regions = [];
@@ -18,7 +18,7 @@ class RegionsListState extends State<RegionsList> {
   @override
   void initState() {
     super.initState();
-    loadRegionsFromJson(context).then((loadedRegions) {
+    loadRegions(context).then((loadedRegions) {
       setState(() {
         regions = loadedRegions;
       });

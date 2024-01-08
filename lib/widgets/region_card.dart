@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/models/const.dart';
 import 'package:travel_app/models/regions.dart';
 import 'package:travel_app/screens/region_detail_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class RegionCard extends StatelessWidget {
   final RegionInfo regionInfo;
@@ -30,11 +33,14 @@ class RegionCard extends StatelessWidget {
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
                 ),
-                child: Image.asset(
-                  regionInfo.imageAsset,
+                child: CachedNetworkImage(
+                  imageUrl: '$getImage${regionInfo.imageAsset}',
                   height: 125,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               Padding(

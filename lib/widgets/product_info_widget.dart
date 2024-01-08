@@ -1,5 +1,8 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Для форматирования чисел
+import 'package:travel_app/models/const.dart'; // Для форматирования чисел
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 // Картинка товара
 class ProductImageWidget extends StatelessWidget {
@@ -11,11 +14,13 @@ class ProductImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
-      child: Image.asset(
-        imageAsset,
+      child: CachedNetworkImage(
+        imageUrl: '$getImage$imageAsset',
         height: 80,
         width: 140,
         fit: BoxFit.cover,
+        placeholder: (context, url) => const CircularProgressIndicator(),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
       ),
     );
   }

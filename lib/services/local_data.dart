@@ -1,17 +1,8 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:travel_app/models/regions.dart';
 import 'package:travel_app/screens/cart_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/screens/favourites_screen.dart';
 
-// Меотд для загрузки регионов из json
-Future<List<RegionInfo>> loadRegionsFromJson(BuildContext context) async {
-  final String jsonStr =
-      await DefaultAssetBundle.of(context).loadString('assets/regions.json');
-  final List<dynamic> jsonList = json.decode(jsonStr);
-  return jsonList.map((json) => RegionInfo.fromJson(json)).toList();
-}
 
 // Метод для загрузки корзины и избранного из SharedPreferences
 Future<void> loadData() async {
