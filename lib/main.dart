@@ -33,7 +33,6 @@ class TravelAgencyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             routes: {
               '/profile': (context) => const ProfileScreen(),
-              // ... возможно, другие маршруты ...
             },
           );
         }));

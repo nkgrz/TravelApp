@@ -13,28 +13,6 @@ class ThemeProvider with ChangeNotifier {
   }
 }
 
-// Кнопка для смены темы
-// class ThemeSwitchButton extends StatelessWidget {
-//   const ThemeSwitchButton({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final themeProvider = Provider.of<ThemeProvider>(context);
-
-//     return ElevatedButton.icon(
-//       onPressed: () {
-//         themeProvider.toggleTheme(); // Изменение темы при нажатии кнопки
-//       },
-//       icon: Icon(
-//         themeProvider.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
-//       ),
-//       label: Text(
-//         themeProvider.isDarkMode ? 'Светлая тема' : 'Темная тема',
-//       ),
-//     );
-//   }
-// }
-
 // Иконка для смены темы солнце/луна
 class ThemeSwitchButton extends StatelessWidget {
   const ThemeSwitchButton({super.key});

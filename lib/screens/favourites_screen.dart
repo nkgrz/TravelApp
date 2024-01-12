@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:travel_app/services/local_data.dart';
 import 'package:travel_app/utils/add_remove_from_cart.dart';
-import 'package:travel_app/widgets/cart_and_favorite_buttons_widget.dart';
+import 'package:travel_app/widgets/buttons/cart_and_favorite_buttons_widget.dart';
 import 'package:travel_app/widgets/product_info_widget.dart';
 
 Set<int> favouritesRegionID = {};
@@ -15,13 +15,6 @@ class FavouritesList extends StatefulWidget {
 }
 
 class _FavouritesListState extends State<FavouritesList> {
-  double getTotalCost() {
-    double totalCost = 0.0;
-    for (int regionId in favouritesRegionID) {
-      totalCost += regions.firstWhere((region) => region.id == regionId).price;
-    }
-    return totalCost;
-  }
 
   @override
   Widget build(BuildContext context) {

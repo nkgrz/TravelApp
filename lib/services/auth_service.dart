@@ -42,7 +42,7 @@ class AuthService {
         // Повторная аутентификация
         await currentUser.reauthenticateWithCredential(credential);
       } on FirebaseAuthException catch (e) {
-        // Здесь можете добавить обработку различных ошибок аутентификации
+        // Здесь можно добавить обработку различных ошибок аутентификации
         throw FirebaseAuthException(code: e.code, message: e.message);
       }
     }

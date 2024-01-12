@@ -18,7 +18,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
   @override
   void initState() {
     super.initState();
-    // Установите начальное состояние isFavorite на основе favouritesRegionID
+    // Установлено начальное состояние isFavorite на основе favouritesRegionID
     isFavorite = favouritesRegionID.contains(widget.regionId);
   }
 
@@ -38,7 +38,7 @@ class FavoriteButtonState extends State<FavoriteButton> {
       },
       icon: Icon(
         isFavorite ? Icons.favorite : Icons.favorite_border,
-        // color: Colors.red, // Вы можете установить свой цвет
+        // color: Colors.red,
       ),
     );
   }

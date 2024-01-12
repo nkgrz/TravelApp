@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_app/utils/add_remove_from_cart.dart';
-import 'package:travel_app/widgets/favorite_button.dart';
+import 'package:travel_app/widgets/buttons/favorite_button.dart';
 import 'package:travel_app/widgets/product_info_widget.dart';
 import 'package:travel_app/widgets/quantity_control_widget.dart';
 

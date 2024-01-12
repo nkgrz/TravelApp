@@ -18,7 +18,7 @@ class RegionsListState extends State<RegionsList> {
   @override
   void initState() {
     super.initState();
-    loadRegions(context).then((loadedRegions) {
+    loadRegions().then((loadedRegions) {
       setState(() {
         regions = loadedRegions;
       });

@@ -5,9 +5,8 @@ import 'package:travel_app/models/regions.dart';
 import 'package:travel_app/screens/cart_screen.dart';
 import 'package:travel_app/screens/regions_screen.dart';
 import 'package:travel_app/utils/add_remove_from_cart.dart';
-import 'package:travel_app/widgets/favorite_button.dart';
+import 'package:travel_app/widgets/buttons/favorite_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 
 class RegionDetailScreen extends StatelessWidget {
   final RegionInfo regionInfo;
